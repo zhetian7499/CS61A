@@ -134,17 +134,27 @@ compose1(square, make_adder(2))(3) //与squadder(3)等价
 
 
 
-**Ex3**
+#### 1.6 Self reference
 
-import from "Hog" project
+![image-20220120222649205](../../AppData/Roaming/Typora/typora-user-images/image-20220120222649205.png)
+
+**精辟**
+
+**Ex**import from "Hog" project
 
 ![image-20220117205803761](../../AppData/Roaming/Typora/typora-user-images/image-20220117205803761.png)
 
 **comment**：关键在于 f 要返回了一个描述当前 leader 的对象。而这个对象又可以进一步用来比较。最终给出的解决方案是：返回一个函数，这个函数的参数是 leader ，并把比较函数 say 包含了进去，使得 say 可以引用 leader 。
 
-另外的理解：每次f比较好两个数，然后把这两个数据更新到自己的函数参数（可以看作返回了一个announce，也可以看作返回了一个say，只不过say借了announce的一个壳，利用了它的参数）
+另外的理解：每次f比较好两个数，然后把这两个数据更新到自己的函数参数（可以看作返回了一个announce，也可以看作返回了一个say，只不过say借了announce的一个壳，利用了它的参数）Environment!!
 
 
 
+**Ex**
 
+![image-20220120222911667](../../AppData/Roaming/Typora/typora-user-images/image-20220120222911667.png)
+
+**Comment**:
+
+protect_secret先返回了一个函数get_secret，这个函数定义在pro的环境下，可以使用pro的参数，检测到输入的字符串与环境下的密码不一致，要将次数减一，并返回新的函数get_secret，但其实中间需要跳到global一次，“刷新下”环境，即（password，secret，2-1）。这样看来，自引用，其实是一次迭代更新原来的函数。**在pro的框架里，一直要定义到下一个自己引用的pro，这样才可以使下一个pro能继承自己的环境。**
 
