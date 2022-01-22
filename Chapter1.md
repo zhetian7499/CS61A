@@ -1,4 +1,6 @@
-#### 1.2.6![image-20220114162954909](Chapter1.assets/image-20220114162954909.png)
+
+
+#### 1.2.6 None-Pure Print Function![image-20220114162954909](Chapter1.assets/image-20220114162954909.png)
 
 print 是一个none pure function
 
@@ -50,7 +52,7 @@ False
 
 
 
-**Textbook**
+**import Textbook**
 
 Python 还包括**布尔运算符** `and`、`or`和`not`。这些运算符用于组合和操作布尔值。
 
@@ -71,9 +73,7 @@ False
 9999
 ```
 
-#### 1.6.7 Lambda Expression
 
-#### ![image-20220115104244302](../../AppData/Roaming/Typora/typora-user-images/image-20220115104244302.png)
 
 #### 1.6.4 Function as Returned Values
 
@@ -134,17 +134,46 @@ compose1(square, make_adder(2))(3) //与squadder(3)等价
 
 
 
-#### 1.6 Self reference
+#### 1.6.7 Lambda Expression
+
+#### ![image-20220115104244302](../../AppData/Roaming/Typora/typora-user-images/image-20220115104244302.png)
+
+
+
+#### Theme:  Currying
+
+```python
+def lambda_curry2(func):
+    """
+    Returns a Curried version of a two-argument function FUNC.
+    >>> from operator import add, mul, mod
+    >>> curried_add = lambda_curry2(add)
+    >>> add_three = curried_add(3)
+    >>> add_three(5)
+    8
+    >>> curried_mul = lambda_curry2(mul)
+    >>> mul_5 = curried_mul(5)
+    >>> mul_5(42)
+    210
+    >>> lambda_curry2(mod)(123)(10)
+    3
+    """
+    return lambda arg1: lambda arg2: func(arg1, arg2)
+```
+
+
+
+#### Theme: Self reference
 
 ![image-20220120222649205](../../AppData/Roaming/Typora/typora-user-images/image-20220120222649205.png)
 
-**精辟**
 
-**Ex**import from "Hog" project
+
+**Ex**： import from "Hog" project
 
 ![image-20220117205803761](../../AppData/Roaming/Typora/typora-user-images/image-20220117205803761.png)
 
-**comment**：关键在于 f 要返回了一个描述当前 leader 的对象。而这个对象又可以进一步用来比较。最终给出的解决方案是：返回一个函数，这个函数的参数是 leader ，并把比较函数 say 包含了进去，使得 say 可以引用 leader 。
+**Comment**：关键在于 f 要返回了一个描述当前 leader 的对象。而这个对象又可以进一步用来比较。最终给出的解决方案是：返回一个函数，这个函数的参数是 leader ，并把比较函数 say 包含了进去，使得 say 可以引用 leader 。
 
 另外的理解：每次f比较好两个数，然后把这两个数据更新到自己的函数参数（可以看作返回了一个announce，也可以看作返回了一个say，只不过say借了announce的一个壳，利用了它的参数）Environment!!
 
@@ -158,3 +187,70 @@ compose1(square, make_adder(2))(3) //与squadder(3)等价
 
 protect_secret先返回了一个函数get_secret，这个函数定义在pro的环境下，可以使用pro的参数，检测到输入的字符串与环境下的密码不一致，要将次数减一，并返回新的函数get_secret，但其实中间需要跳到global一次，“刷新下”环境，即（password，secret，2-1）。这样看来，自引用，其实是一次迭代更新原来的函数。**在pro的框架里，一直要定义到下一个自己引用的pro，这样才可以使下一个pro能继承自己的环境。**
 
+
+
+#### Theme: Recursive
+
+##### return value体现递归次数
+
+![image-20220122000740436](../../AppData/Roaming/Typora/typora-user-images/image-20220122000740436.png)
+
+
+
+##### 借助定义helper函数
+
+**作用**
+
+![image-20220122130651561](../../AppData/Roaming/Typora/typora-user-images/image-20220122130651561.png)
+
+**Ex**
+
+![image-20220122130638482](../../AppData/Roaming/Typora/typora-user-images/image-20220122130638482.png)
+
+**Ex**
+
+![image-20220122142444446](../../AppData/Roaming/Typora/typora-user-images/image-20220122142444446.png)
+
+```python
+def helper(result, i, step):
+        if i == n:
+            return result
+        elif i % 8 == 0 or num_eights(i) > 0:
+            return helper(result - step, i + 1, -step)
+        else:
+            return helper(result + step, i + 1, step)
+    return helper(1, 1, 1)
+```
+
+
+
+#### Trick
+
+##### max的妙用
+
+**Ex**
+
+![image-20220122143949782](../../AppData/Roaming/Typora/typora-user-images/image-20220122143949782.png)
+
+```python
+##我的原代码               //报错原因，1122返回-2。其实在数字“相同”和“相差1”两种情况下，都应返回0.即当计算为-1，应返回0.
+if n<10: return 0
+    return missing_digits(n//10)+n%10-n//10%10-1  
+  //return missing_digits(n//10)+max(n%10-n//10%10-1,0)  //使用max，一行完善，0的时候返回0，-1的时候也返回0
+```
+
+
+
+##### print反向级联
+
+![image-20220122160734334](../../AppData/Roaming/Typora/typora-user-images/image-20220122160734334.png)
+
+**Comment**:利用了 Tree Recursion, 每一个grow下，分支出了grow和print，利用 f_then_g 中  ”if n"一直递归下去，直到n为假值，然后反向执行 Tree Recursion
+
+#### Syntax
+
+##### 字符串和列表的区别
+
+<img src="../../AppData/Roaming/Typora/typora-user-images/image-20220122164829336.png" alt="image-20220122164829336" style="zoom:50%;" />
+
+**Comment**: 考虑字符串的特殊性，有时候需要检索字符串中的单词
