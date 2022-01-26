@@ -140,6 +140,74 @@ compose1(square, make_adder(2))(3) //与squadder(3)等价
 
 
 
+#### Theme: Environment( used diagram)
+
+**Ex**
+
+```python
+wow = 6
+def much(wow):
+    if much == wow:
+        such = lambda wow: 5
+        def wow():
+            return such
+        return wow
+    such = lambda wow: 4
+    return wow()
+
+wow = much(much(much))(wow)
+```
+
+https://goo.gl/rLDpDe
+
+<img src="../../AppData/Roaming/Typora/typora-user-images/image-20220122232409448.png" alt="image-20220122232409448" style="zoom: 67%;" />
+
+**Comment**
+
+f3 的 wow，Return value 是 line 5下的 Lambda 函数，而不是 line 9 下的 Lambda函数，因为对 wow()的 call，使得返回到了 f1 的环境中， such也该使用 f1 中的such。
+
+本质上，这道题表明了，即使两个函数（much）都定义在 Global 下，里面的定义，也有 f1，f2环境的区分。
+
+第一次 call much ( much )，定义的 such 和 wow 都只在当前这一次 call 的 much 的环境内，即 f1 的环境。第二次 call much ( wow )，定义的 such 和 wow 在 f2 的环境内。可能这点细小入微的差别真的生动诠释了什么是 SICP。
+
+
+
+**Ex2** import from http://albertwu.org/cs61a/review/environments/exam.html
+
+```python
+def funny(joke):
+    hoax = joke + 1
+    return funny(hoax)
+
+def sad(joke):
+    hoax = joke - 1
+    return hoax + hoax
+
+funny, sad = sad, funny
+result = funny(sad(1))
+```
+
+![image-20220122234819951](../../AppData/Roaming/Typora/typora-user-images/image-20220122234819951.png)
+
+
+
+**Ex3** import from http://albertwu.org/cs61a/review/environments/exam.html
+
+```
+def double(x):
+    return double(x + x)
+first = double
+def double(y):
+    return y + y
+result = first(10)
+```
+
+result = 40
+
+**Comment**: 定义的 double 函数中， return 后写的 double ，就是实实在在的 double ，绑定到了以 double 为名的函数上。
+
+
+
 #### Theme:  Currying
 
 ```python
@@ -247,10 +315,3 @@ if n<10: return 0
 
 **Comment**:利用了 Tree Recursion, 每一个grow下，分支出了grow和print，利用 f_then_g 中  ”if n"一直递归下去，直到n为假值，然后反向执行 Tree Recursion
 
-#### Syntax
-
-##### 字符串和列表的区别
-
-<img src="../../AppData/Roaming/Typora/typora-user-images/image-20220122164829336.png" alt="image-20220122164829336" style="zoom:50%;" />
-
-**Comment**: 考虑字符串的特殊性，有时候需要检索字符串中的单词
