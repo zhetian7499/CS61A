@@ -174,6 +174,20 @@ time += [3]
 
 
 
+### yield
+
+![image-20220126215246989](../../AppData/Roaming/Typora/typora-user-images/image-20220126215246989.png)
+
+![image-20220126215413992](../../AppData/Roaming/Typora/typora-user-images/image-20220126215413992.png)
+
+
+
+### yield with return statement
+
+![image-20220128133744429](../../AppData/Roaming/Typora/typora-user-images/image-20220128133744429.png)
+
+
+
 ## Abstraction Barriers
 
 import from: http://composingprograms.com/pages/22-data-abstraction.html#:~:text=2.2.3%C2%A0%C2%A0%C2%A0Abstraction%20Barriers
@@ -202,4 +216,85 @@ return tree( sum( [label(b) for b in branches] ), branches)
 ```
 
  especially sum( [label(b) for b in branches])
+
+## String Representations
+
+**str**
+
+对应着`print`函数打印的方法，目的是方便人类阅读
+
+**repr**
+
+对应着`interative python`中打印的方法，目的是方便程序阅读
+
+```python
+class Lamb:
+     species_name = "Lamb"
+     scientific_name = "Ovis aries"
+     def __init__(self, name):
+     	self.name = name
+     def __str__(self):
+     	return "Lamb named " + self.name
+>>> str(lil)
+'Lamb named Lil lamb'
+>>> print(lil)
+Lamb named Lil lamb
+>>> repr(lil)
+'<__main__.Lamb object at 0x000002535EFB6350>'
+>>> lil
+<__main__.Lamb object at 0x000002535EFB6350>
+```
+
+
+
+```python
+class A:
+     def __init__(self, x):
+         self.x = x
+     def __repr__(self):
+         return self.x
+			def __str__(self):
+         return self.x * 2
+class B:
+     def __init__(self):
+         print('boo!')
+         self.a = []
+     def add_a(self, a):
+         self.a.append(a)
+     def __repr__(self):
+         print(len(self.a))
+         ret = ''
+         for a in self.a:
+             ret += str(a)
+         return ret
+    
+ >>> A('one')
+one
+>>> print(A('one'))
+oneone
+>>> repr(A('two'))
+'two'
+>>> b = B()
+boo!
+>>> b.add_a(A('a'))
+>>> b.add_a(A('b'))
+>>> b
+2
+aabb
+```
+
+自行实现`str`与`repr`方法：
+
+```python
+def repr(x):
+    # 因为是class attribute     
+    return type(x).__repr__(x)
+
+def str(x):
+    t = type(x)
+    if hasattr(t, '__str__'):
+        return t.__str__(x)
+    else:
+        return repr(x)
+```
 
