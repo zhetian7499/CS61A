@@ -141,6 +141,24 @@ lst=[6, 5, 4, 3, 2, 1, 0]
 
 
 
+### Iterable
+
+对list、tuple、dict、等类型的数据使用for...in...的循环语法从其中依次拿到数据进行使用，这样的过程称为遍历，也叫迭代。
+
+把可以通过for...in...这类语句迭代读取一条数据供我们使用的对象称之为**可迭代对象（Iterable）**
+
+```python
+>>> from collections import Iterable
+>>> isinstance('abc',Iterable)#str是否可迭代
+True
+>>> isinstance([1,2,3],Iterable)#list是否可迭代
+True
+>>> isinstance(123,Iterable)#整数是否可迭代
+False
+```
+
+
+
 ### Function-min 关键字比较，返回整体
 
 ![image-20220124200112496](../../AppData/Roaming/Typora/typora-user-images/image-20220124200112496.png)
