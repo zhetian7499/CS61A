@@ -316,3 +316,14 @@ def str(x):
         return repr(x)
 ```
 
+
+
+## Scheme
+
+Specification: https://inst.eecs.berkeley.edu/~cs61a/fa21/articles/scheme-spec/
+
+mu: Mu procedures are similar, but the new frame's parent is the frame in which the `mu` is called, not the frame in which it was created
+
+![image-20220211193133521](../../AppData/Roaming/Typora/typora-user-images/image-20220211193133521.png)
+
+![image-20220211193151849](../../AppData/Roaming/Typora/typora-user-images/image-20220211193151849.png)
